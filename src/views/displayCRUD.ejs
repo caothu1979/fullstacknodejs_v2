@@ -1,0 +1,62 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get all users</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1>This is get all users</h1>
+    <p><%= data.length %></p>
+    
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Stt</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">PhoneNumber</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(let i=0; i < data.length; i++) {%>
+                        <tr>
+                            <td><%= data[i].id %></td>
+                            <td><%= data[i].email %></td>
+                            <td><%= data[i].firstName %></td>
+                            <td>
+                                <%= data[i].lastName %>
+                            </td>
+                            <td>
+                                <%= data[i].gender %>
+                            </td>
+                            <td>
+                                <%= data[i].phonenumber %>
+                            </td>
+                            <td>
+                                <%= data[i].address %>
+                            </td>
+                            <td>
+                                <%= data[i].roleId %>
+                            </td>
+                            <td>
+                                <a href="/edit-user?id=<%= data[i].id %>" type="button">Edit</a>
+                                <a href="" type="button">Delete</a>
+                            </td>
+                        </tr>
+                    <% } %>
+               
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+</html>
