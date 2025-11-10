@@ -53,8 +53,9 @@ let updateUserById = async(id) => {
             let user = await db.User.findOne({
                 where: { id: id },
                 raw: true
-            });
-            if (user) {
+            }
+            );
+            if(user){
                 resolve(user);
             }
             else {
@@ -66,62 +67,9 @@ let updateUserById = async(id) => {
         }
     });
 } 
-let updateUser1 = async (data) => {
-    console.log("Update user1 ",data.id);
-    return new Promise(async(resolve, reject) => {
-        try {
-            console.log(data.id);
-            let user = await db.User.findOne({
-                    where: {id: data.id}
-                });
-            if (user) {
-                user.firstName = data.firstName;
-                user.lastName = data.lastName;
-                user.address = data.address;
-                user.phonenumber = data.phonenumber;
-                user.gender = data.gender=== 1? true:false;
-                user.roleId = data.roleId;
-                await user.save();
-                let allUsers = await db.User.findAll();
-                resolve(allUsers);
-            }
-            else {
-                resolve({});
-            }
-
-        } catch (e) {
-            reject(e);
-        }
-    });
-}
-let deleteUserById = (id) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            if (id)
-            {
-                let user = await db.User.findOne(
-                    {
-                        where: {
-                            id: id
-                        }
-                    }
-                );
-                await user.destroy();
-                let allUsers = await db.User.findAll();
-                resolve(allUsers);
-            }
-
-        } catch (e) {
-            reject(e);
-        }
-        
-    }); 
-}
 module.exports = {
     getAllUsers: getAllUsers,
     createUser: createUser,
     hashCreatePassword: hashCreatePassword,
-    updateUserById: updateUserById,
-    updateUser1: updateUser1,
-    deleteUserById:deleteUserById
+    updateUserById: updateUserById
 }

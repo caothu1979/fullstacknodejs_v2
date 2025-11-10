@@ -1,6 +1,7 @@
 import { render } from "ejs";
 import express from "express";
 import homeController from "../controllers/homeController";
+import userController from "../controllers/userController";
 let router = express.Router();
 
 let initWebRouters = (app) => {
@@ -9,7 +10,11 @@ let initWebRouters = (app) => {
     router.get("/get-users", homeController.displayAllUsers);
     router.get("/create-users", homeController.createUsers);
     router.post("/post-users", homeController.postCreateUsers);
-    router.get("/edit-user", homeController.editUpdateUser);
+    router.get("/edit-users", homeController.editUpdateUser);
+    router.post("/put-users", homeController.updateUser);
+    router.get("/delete-users", homeController.deleteUser);
+    router.post("/api/login", userController.handlelogin);
+    
     router.get("/hoidanit", (req, res) => {
     return res.send("Hello word with hoidanit");
     });

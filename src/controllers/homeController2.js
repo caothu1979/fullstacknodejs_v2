@@ -29,39 +29,18 @@ let postCreateUsers = async(req, res) => {
 
 }
 let editUpdateUser = async(req,res) => {
-    //console.log(req.query.id);
+    console.log(req.query.id);
     let userId = req.query.id;
-    if (userId) {
-        let newUser = await CRUDservices.updateUserById(userId);
-        return res.render("editupdateuser.ejs",{newUser:newUser});
+    if (userId)
+    {
+    let newUser = await CRUDservices.updateUserById(userId);
+    console.log(newUser);
+    return res.render("editupdateuser.ejs",{
+        newUser: newUser
+    });
     }
     else {
-        return res.send("Not found user");
-    }  
-}
-let updateUser = async(req, res) => {
-    let user = req.body;
-    console.log("update user:",req.body);
-    if (req.body) {
-        let userUpdate = await CRUDservices.updateUser1(user);
-      return res.render("displayCRUD.ejs", {
-            data: userUpdate
-        });  
-    }
-    else {
-        return res.send("Not found user");
-    }    
-}
-let deleteUser = async(req, res) => {
-    let userId = req.query.id;
-    if (userId) {
-        let allUsers = await CRUDservices.deleteUserById(userId);
-        return res.render("displayCRUD.ejs", {
-            data: allUsers
-        }); 
-    }
-    else {
-       return res.send("No Delete from user from database"); 
+       return res.send("Not Found an user"); 
     }
     
 }
@@ -72,7 +51,5 @@ module.exports = {
     displayAllUsers: displayAllUsers,
     createUsers: createUsers,
     postCreateUsers: postCreateUsers,
-    editUpdateUser: editUpdateUser,
-    updateUser: updateUser,
-    deleteUser: deleteUser
+    editUpdateUser: editUpdateUser
 }
