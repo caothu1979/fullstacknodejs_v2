@@ -4,44 +4,47 @@ let handleUserLogin = async(email, userPassword) => {
     return new Promise(async(resolve, reject) => {
         try {
             let userData = {};
-            let isCheck = await checkUserEmail(email);
-            console.log(isCheck);
-            if (isCheck) {
+            let isExits = await db.User.findOne({
+                where: {email:email}
+            });
+            if (isExits) {
                 let user = await db.User.findOne({
-                    email:email
+                    where: {email: email}
                 });
-                console.log(user);
                 if (user) {
-                    let check = await bcrypt.compareSync(userPassword, user.password);
-                    console.log(check);
-                    if (check) {
-                        userData.errCode = 0;
-                        userData.errMessage = "ok";
-                        userData.user = user;
-                    } else {
-                        userData.errCode = 2;
-                        userData.errMessage = `Wrong password!`;
-                    }
-                }
-                else {
-                    userData.errCode = 3;
-                    userData.errMessage = `User not found`;
+                   let check = await bcrypt.compareSync(userPassword, user.password);
+                   if (check) {
+                    userData.errCode = 0 ;
+                    userData.errMessage = "ok";
+                    userData.user = user;
 
-                    }
+                   }
+                   else {
+                    userData.errCode = 3 ;
+                    userData.errMessage = "Wrong password";
+                   }
+
+
+                } else {
+                    userData.errCode =2;
+                    userData.errMessage =`User not found`;
+
                 }            
-           
+            }
             else {
                 userData.errCode = 1;
-                userData.errMessage = `Your's Email is not exits in system. plz other email`;
+                userData.errMessage = `Your's email not exist in the system, plz other email`;
                 
+
             }
             resolve(userData);
-        } catch (e)
-        {
+
+        } catch(e) {
             reject(e);
         }
-    });
-}
+
+    }) }
+        
 let checkUserEmail = async(userEmail) => {
     return new Promise(async(resolve, reject) => { 
         try {

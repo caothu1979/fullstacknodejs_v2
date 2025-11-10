@@ -17,7 +17,7 @@ let handlelogin = async(req, res) => {
             //yourPassword: password,
             //test:"test"
             errCode: userData.errCode,
-            message:userData.errMessage,
+            errMessage: userData.errMessage,
             userData:userData
         }
     );
