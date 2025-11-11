@@ -3,10 +3,17 @@ import bodyParser from "body-parser";
 import viewEngine from "./config/viewEngine";
 import initWebRoutes from './route/web';
 require('dotenv').config();
+import cors from "cors";
 
 let app = express();
-
-//config app
+//app.use(cors());
+//app.use(cors({ origin: true }));
+//config 
+app.use(cors({
+  origin: ['http://localhost:3000'], // cho phép frontend của chị truy cập
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true, // bật nếu có dùng cookie / token
+}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))

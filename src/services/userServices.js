@@ -9,13 +9,15 @@ let handleUserLogin = async(email, userPassword) => {
             });
             if (isExits) {
                 let user = await db.User.findOne({
-                    where: {email: email}
+                    where: { email: email },
+                    raw:true
                 });
                 if (user) {
                    let check = await bcrypt.compareSync(userPassword, user.password);
                    if (check) {
                     userData.errCode = 0 ;
-                    userData.errMessage = "ok";
+                       userData.errMessage = "ok";
+                       delete user.password;
                     userData.user = user;
 
                    }
@@ -23,8 +25,6 @@ let handleUserLogin = async(email, userPassword) => {
                     userData.errCode = 3 ;
                     userData.errMessage = "Wrong password";
                    }
-
-
                 } else {
                     userData.errCode =2;
                     userData.errMessage =`User not found`;
@@ -33,8 +33,7 @@ let handleUserLogin = async(email, userPassword) => {
             }
             else {
                 userData.errCode = 1;
-                userData.errMessage = `Your's email not exist in the system, plz other email`;
-                
+                userData.errMessage = `Your's email not exist in the system, plz other email`;          
 
             }
             resolve(userData);
