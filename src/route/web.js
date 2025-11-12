@@ -13,7 +13,9 @@ let initWebRouters = (app) => {
     router.get("/edit-users", homeController.editUpdateUser);
     router.post("/put-users", homeController.updateUser);
     router.get("/delete-users", homeController.deleteUser);
+    
     router.post("/api/login", userController.handlelogin);
+    router.get("/api/get-all-users", userController.handleGetAllUsers);
     
     router.get("/hoidanit", (req, res) => {
     return res.send("Hello word with hoidanit");
