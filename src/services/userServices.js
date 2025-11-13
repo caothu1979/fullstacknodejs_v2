@@ -1,5 +1,6 @@
 import db from "../models/index";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
+const salt = bcrypt.genSaltSync(10);
 let handleUserLogin = async(email, userPassword) => {
     return new Promise(async(resolve, reject) => {
         try {
@@ -91,7 +92,51 @@ let getAllUsers = async(userId) => {
         
     }); 
 } 
+let deleteUserById = (id) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "User is not exist",
+                       
+                });
+            } else {
+                let user = await db.User.findOne({
+                    where: { id: id }
+                });
+                if (user) {
+                    user.destroy();
+                    resolve({
+                    errCode: 0,
+                    errMessage: "User delete from system",                  });
+                } 
+            }
+
+        } catch (error) {
+            reject(e);
+        }
+     });
+
+}
+let hashCreatePassword = async(password) => {
+    return new Promise(async(resolve,reject) => {
+        try {
+            const hashPassword = await bcrypt.hashSync(password, salt);
+            resolve(hashPassword);
+        } catch(e) {
+            reject(e);
+        }       
+    })    
+}
+let createNewUser = (data) => {
+    return new Promise(async(resolve, reject) => { 
+
+    });
+}
 module.exports = {
     handleUserLogin: handleUserLogin,
-    getAllUsers: getAllUsers
+    createNewUser: createNewUser,
+    getAllUsers: getAllUsers,
+    deleteUserById: deleteUserById
 }

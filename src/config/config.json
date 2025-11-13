@@ -5,7 +5,8 @@
     "database": "hoidanit",
     "host": "localhost",
     "dialect": "mysql",
-    "raw": true
+    "raw": true,
+    "timezone":"+07:00"
   },
   "test": {
     "username": "root",

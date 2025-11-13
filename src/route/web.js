@@ -16,6 +16,7 @@ let initWebRouters = (app) => {
     
     router.post("/api/login", userController.handlelogin);
     router.get("/api/get-all-users", userController.handleGetAllUsers);
+    router.delete("/api/delete-user", userController.handleDeleteUserById);
     
     router.get("/hoidanit", (req, res) => {
     return res.send("Hello word with hoidanit");

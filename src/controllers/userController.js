@@ -35,7 +35,21 @@ let handleGetAllUsers = async(req, res) => {
     });
 
 }
+let handleDeleteUserById = async(req, res) => {
+    let userId = req.body.id;
+    console.log(userId);
+    if (!userId) {
+        return res.status(200).json({
+            errCode: 1,
+            errMessage:"Missing parameters"
+    });
+    }
+    let message = await userServices.deleteUserById(userId);
+    return res.status(200).json(message);
+    
+}
 module.exports = {
     handlelogin: handlelogin,
-   handleGetAllUsers:handleGetAllUsers 
+    handleGetAllUsers: handleGetAllUsers,
+   handleDeleteUserById: handleDeleteUserById
 }
