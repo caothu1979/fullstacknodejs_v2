@@ -5,9 +5,10 @@
     "database": "hoidanit",
     "host": "localhost",
     "dialect": "mysql",
-    "raw": true
+    "query":{"raw":true},
+    "timezone":"+07:00"
   },
-  "test": {
+    "test": {
     "username": "root",
     "password": null,
     "database": "database_test",
