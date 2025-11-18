@@ -56,6 +56,17 @@ let handleEditUpdateUser = async (req, res) => {
         return res.status(500).json("User is not exist111");
     }
 }
+let handleEditUpdateUser1 = async (req, res) => {
+    let userData = req.body;
+
+    if (userData.id) {
+        let data = await userServices.editUpdateUser(userData);
+        return res.status(200).json(data);
+    }
+    else {
+        return res.status(500).json("User is not exist111");
+    }
+}
 let handleDeleteUser = async (req, res) => {
     let id = req.body.id;
     console.log("ID USER:", id);
