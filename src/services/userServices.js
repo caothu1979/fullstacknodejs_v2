@@ -20,7 +20,6 @@ let handleUserLogin = async (email, userPassword) => {
                         userData.errMessage = "ok";
                         delete user.password;
                         userData.user = user;
-
                     }
                     else {
                         userData.errCode = 3;
@@ -29,23 +28,19 @@ let handleUserLogin = async (email, userPassword) => {
                 } else {
                     userData.errCode = 2;
                     userData.errMessage = `User not found`;
-
                 }
             }
             else {
                 userData.errCode = 1;
                 userData.errMessage = `Your's email not exist in the system, plz other email`;
-
             }
             resolve(userData);
-
         } catch (e) {
             reject(e);
         }
 
     })
 }
-
 let checkUserEmail = async (userEmail) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -58,7 +53,6 @@ let checkUserEmail = async (userEmail) => {
             else {
                 resolve(false);
             }
-
         } catch (e) {
             reject(e);
         }
@@ -82,14 +76,11 @@ let getAllUsers = async (userId) => {
                         exclude: ['password']
                     }
                 });
-
             }
             resolve(users);
-
         } catch (error) {
             reject(error);
         }
-
     });
 }
 let hashCreatePassword = async (password) => {
@@ -126,7 +117,6 @@ let createUser = (data) => {
                     roleId: data.roleId,
                     phonenumber: data.phonenumber,
                     positionId: data.positionId
-
                 });
                 resolve({
                     errCode: 0,
@@ -178,13 +168,11 @@ let editUpdateUser = (data) => {
 let deleteUser = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-
             if (id) {
                 let user = await db.User.findOne({
                     where: { id: id },
                     raw: false
                 })
-
                 if (!user) {
                     resolve({
                         errCode: 1,
