@@ -5,7 +5,7 @@ let getDoctorHome = (limitInput) => {
                let users = await db.User.findAll({
                     where: { roleId: 'R2' },
                     limit: limitInput,
-                    order: [['createdAt', 'DESC']],
+                    //order: [['createdAt', 'DESC']],
                     attributes: { exclude: ['password', 'image'] },
                     include: [
                          { model: db.Allcodes, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
