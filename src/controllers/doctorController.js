@@ -1,4 +1,4 @@
-import doctorService from "../services/doctorSevice";
+import doctorService from "../services/doctorService";
 let getTopDoctorHome = async (req, res) => {
     let limit = req.query.limit;
     if (!limit) limit = 10;
@@ -11,10 +11,7 @@ let getTopDoctorHome = async (req, res) => {
             errCode: -1,
             errMessage: "Error from server..."
         })
-
-
     }
-
 
 }
 module.exports = {
