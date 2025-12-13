@@ -15,14 +15,15 @@ module.exports = {
       clinicId: {
         type: Sequelize.INTEGER
       },
-      description: {
-        type: Sequelize.STRING
-      },
+
       contentHTML: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT('long')
       },
       contentMarkdown: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT('long')
+      },
+      description: {
+        type: Sequelize.TEXT('long')
       },
       createdAt: {
         allowNull: false,
