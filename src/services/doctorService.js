@@ -69,8 +69,50 @@ let postInforDetailDoctor = (inputData) => {
           }
      })
 }
+let getDetailDoctorByIdService = (inputId) => {
+     return new Promise (async(resolve,reject) =>{
+          try {
+               if (!inputId) {
+                    resolve({
+                         errCode: 1,
+                         errMassage: "Missing required parameter"
+                    })
+               } else {
+                    let data = await db.User.findOne({
+                         where: { id: inputId},
+                         attributes: { exclude: ['password'] },
+                    include: [
+                         { model: db.Allcodes, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
+                         { model: db.Allcodes, as: 'genderData', attributes: ['valueEn', 'valueVi'] },
+                         { model: db.markdown },
+                       
+                    ],
+                    raw: false,
+                    nest: true
+                    });
+                    if (data && data.image) {
+                    data.image = new Buffer(data.image, 'base64').toString('binary');
+                         
+                    }
+                    if(!data) data ={};
+                    resolve({
+                         errCode: 0,
+                         data: data
+                    })
+               }
+
+
+          }catch(e) {
+               console.log(e);
+               reject(e);
+          }
+     })
+
+}
 module.exports = {
      getDoctorHome: getDoctorHome,
      getAllDoctors: getAllDoctors,
-     postInforDetailDoctor: postInforDetailDoctor
+     postInforDetailDoctor: postInforDetailDoctor,
+     getDetailDoctorByIdService: getDetailDoctorByIdService
+     
 }
