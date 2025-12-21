@@ -43,25 +43,48 @@ let getAllDoctors = () => {
 let postInforDetailDoctor = (inputData) => {
      return new Promise(async (resolve, reject) => {
           try {
+               console.log("Check input data:", inputData);
                if (!inputData.doctorId || !inputData.contentHTML
-                    || !inputData.contentMarkdown) {
+                    || !inputData.contentMarkdown || !inputData.action) {
                     resolve({
                          errCode: 1,
-                         errMassage: "Missing required parameter"
+                         errMessage: "Missing required parameter"
 
                     })
                }
                else {
-                    await db.markdown.create({
-                         contentHTML: inputData.contentHTML,
-                         contentMarkdown: inputData.contentMarkdown,
-                         description: inputData.description,
-                         doctorId: inputData.doctorId,
-                    });
-                    resolve({
-                         errCode: 0,
-                         errMassage: "Save information Doctor succeed"
-                    });
+                    if (inputData.action === 'CREATE') {
+                         await db.markdown.create({
+                              contentHTML: inputData.contentHTML,
+                              contentMarkdown: inputData.contentMarkdown,
+                              description: inputData.description,
+                              doctorId: inputData.doctorId,
+                         });
+                         resolve({
+                              errCode: 0,
+                              errMessage: "Create information Doctor succeed"
+                         });
+                    }
+                    else if (inputData.action === 'EDIT') {
+                         let doctorMarkdown = await db.markdown.findOne({
+                              where: { doctorId: inputData.doctorId },
+                              raw: false,
+                         })
+                         if (doctorMarkdown) {
+                              doctorMarkdown.contentHTML = inputData.contentHTML;
+                              doctorMarkdown.contentMarkdown = inputData.contentMarkdown;
+                              doctorMarkdown.description = inputData.description;
+                              doctorMarkdown.updatedAt = new Date();
+                              await doctorMarkdown.save();
+                         }
+                         resolve({
+                              errCode: 0,
+                              errMessage: "Save information Doctor succeed"
+                         });
+
+                    }
+
+
                }
 
           } catch (e) {
@@ -70,7 +93,7 @@ let postInforDetailDoctor = (inputData) => {
      })
 }
 let getDetailDoctorByIdService = (inputId) => {
-     return new Promise (async(resolve,reject) =>{
+     return new Promise(async (resolve, reject) => {
           try {
                if (!inputId) {
                     resolve({
@@ -79,30 +102,31 @@ let getDetailDoctorByIdService = (inputId) => {
                     })
                } else {
                     let data = await db.User.findOne({
-                         where: { id: inputId},
+                         where: { id: inputId },
                          attributes: { exclude: ['password'] },
-                    include: [
-                         { model: db.Allcodes, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
-                         { model: db.Allcodes, as: 'genderData', attributes: ['valueEn', 'valueVi'] },
-                         { model: db.markdown },
-                       
-                    ],
-                    raw: false,
-                    nest: true
+                         include: [
+                              { model: db.Allcodes, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
+                              { model: db.Allcodes, as: 'genderData', attributes: ['valueEn', 'valueVi'] },
+                              { model: db.markdown },
+
+                         ],
+                         raw: false,
+                         nest: true
                     });
                     if (data && data.image) {
-                    data.image = new Buffer(data.image, 'base64').toString('binary');
-                         
+                         data.image = new Buffer(data.image, 'base64').toString('binary');
+
                     }
-                    if(!data) data ={};
+                    if (!data) data = {};
                     resolve({
                          errCode: 0,
                          data: data
                     })
+                    // console.log("Check data:", data);
                }
 
 
-          }catch(e) {
+          } catch (e) {
                console.log(e);
                reject(e);
           }
@@ -114,5 +138,5 @@ module.exports = {
      getAllDoctors: getAllDoctors,
      postInforDetailDoctor: postInforDetailDoctor,
      getDetailDoctorByIdService: getDetailDoctorByIdService
-     
+
 }
