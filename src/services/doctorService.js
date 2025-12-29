@@ -1,4 +1,5 @@
 import db from "../models/index";
+require('dotenv').config();
 let getDoctorHome = (limitInput) => {
      return new Promise(async (resolve, reject) => {
           try {
@@ -133,10 +134,40 @@ let getDetailDoctorByIdService = (inputId) => {
      })
 
 }
+let bulkCreateSchedule = (inputData) => {
+     return new Promise(async (resolve, reject) => {
+          try {
+               if (!inputData.arrSchedule || !inputData.doctorId || !inputData.date) {
+                    resolve({
+                         errCode: 1,
+                         errMessage: "Missing required parameter"
+                    })
+               }
+               else {
+                    let schedule = inputData.arrSchedule;
+                    if (schedule && schedule.length > 0) {
+                         schedule = schedule.map(item => {
+                              item.maxNumber = process.env.MAX_NUMBER_SCHEDULE;
+                              return item;
+                         });
+                         console.log("Check schedule:", schedule);
+                         let res = await db.schedule.bulkCreate(schedule);
+                         resolve({
+                              errCode: 0,
+                              errMessage: "Create schedule succeed"
+                         })
+                    }
+               }
+          } catch (e) {
+               reject(e);
+          }
+     })
+}
 module.exports = {
      getDoctorHome: getDoctorHome,
      getAllDoctors: getAllDoctors,
      postInforDetailDoctor: postInforDetailDoctor,
-     getDetailDoctorByIdService: getDetailDoctorByIdService
+     getDetailDoctorByIdService: getDetailDoctorByIdService,
+     bulkCreateSchedule: bulkCreateSchedule
 
 }

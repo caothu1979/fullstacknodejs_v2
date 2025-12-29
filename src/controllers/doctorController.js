@@ -40,13 +40,13 @@ let postInforDoctor = async (req, res) => {
         });
     }
 }
-let getDetailDoctorById = async(req, res) => {
+let getDetailDoctorById = async (req, res) => {
     try {
         let reqId = req.query.id;
-        console.log("Check id",reqId);
-    let infor = await doctorService.getDetailDoctorByIdService(reqId);
-    return res.status(200).json(infor);
-    } catch(e) {
+        console.log("Check id", reqId);
+        let infor = await doctorService.getDetailDoctorByIdService(reqId);
+        return res.status(200).json(infor);
+    } catch (e) {
         console.log(e);
         return res.status(200).json({
             errCode: -1,
@@ -55,9 +55,25 @@ let getDetailDoctorById = async(req, res) => {
     }
 
 }
+let postBulkCreateSchedule = async (req, res) => {
+    try {
+        console.log("Check data schedule:", req.body);
+        let response = await doctorService.bulkCreateSchedule(req.body);
+        console.log("Check response:", response);
+        return res.status(200).json(response);
+
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from Server"
+        });
+    }
+}
 module.exports = {
     getTopDoctorHome: getTopDoctorHome,
     getAllDoctors: getAllDoctors,
     postInforDoctor: postInforDoctor,
-    getDetailDoctorById: getDetailDoctorById
+    getDetailDoctorById: getDetailDoctorById,
+    postBulkCreateSchedule: postBulkCreateSchedule
 }
