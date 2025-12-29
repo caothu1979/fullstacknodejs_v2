@@ -18,10 +18,10 @@ module.exports = {
       date: {
         type: Sequelize.DATE
       },
-      docterId: {
+      doctorId: {
         type: Sequelize.INTEGER
       },
-      timetype: {
+      timeType: {
         type: Sequelize.STRING
       },
       createdAt: {

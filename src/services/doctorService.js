@@ -1,5 +1,7 @@
 import db from "../models/index";
+import _ from 'lodash';
 require('dotenv').config();
+const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 let getDoctorHome = (limitInput) => {
      return new Promise(async (resolve, reject) => {
           try {
@@ -145,13 +147,32 @@ let bulkCreateSchedule = (inputData) => {
                }
                else {
                     let schedule = inputData.arrSchedule;
+                    console.log('check array schedule:',schedule);
                     if (schedule && schedule.length > 0) {
                          schedule = schedule.map(item => {
-                              item.maxNumber = process.env.MAX_NUMBER_SCHEDULE;
+                              item.maxNumber = MAX_NUMBER_SCHEDULE;
                               return item;
                          });
-                         console.log("Check schedule:", schedule);
-                         let res = await db.schedule.bulkCreate(schedule);
+                        // console.log("Check input maxNumber schedule:", schedule);
+                        // let res = await db.schedule.bulkCreate(schedule);
+                         let existing = await db.schedule.findAll({
+                              where: {doctorId: inputData.doctorId, 
+                                   date: inputData.date},
+                              attributes:[ 'doctorId','timeType','date','maxNumber'],
+                              raw: true
+                         });
+                         if(existing && existing.length > 0){
+                              existing= existing.map(item =>{
+                                   item.date = new Date(item.date).getTime();
+                                   return item;
+                              });
+                         }
+                         let toCreate = _.differenceWith(schedule, existing, (a,b) =>{
+                              return a.timeType === b.timeType && a.date === b.date;
+                         })
+                         if (toCreate && toCreate.length > 0) {
+                              await db.schedule.bulkCreate(toCreate);
+                         }
                          resolve({
                               errCode: 0,
                               errMessage: "Create schedule succeed"
