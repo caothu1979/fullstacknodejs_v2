@@ -70,10 +70,26 @@ let postBulkCreateSchedule = async (req, res) => {
         });
     }
 }
+let getSheduleDoctorByDate = async(req,res) => {
+    try {
+       
+        let response = await doctorService.scheduleDoctorByDate(req.query.doctorId,req.query.date);
+        console.log("Check response:", response);
+        return res.status(200).json(response);
+
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from Server"
+        });
+    }
+}
 module.exports = {
     getTopDoctorHome: getTopDoctorHome,
     getAllDoctors: getAllDoctors,
     postInforDoctor: postInforDoctor,
     getDetailDoctorById: getDetailDoctorById,
-    postBulkCreateSchedule: postBulkCreateSchedule
+    postBulkCreateSchedule: postBulkCreateSchedule,
+    getSheduleDoctorByDate: getSheduleDoctorByDate
 }
