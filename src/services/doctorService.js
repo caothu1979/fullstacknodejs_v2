@@ -147,29 +147,32 @@ let bulkCreateSchedule = (inputData) => {
                }
                else {
                     let schedule = inputData.arrSchedule;
-                    console.log('check array schedule:',schedule);
+                    console.log('check array schedule:', schedule);
                     if (schedule && schedule.length > 0) {
                          schedule = schedule.map(item => {
                               item.maxNumber = MAX_NUMBER_SCHEDULE;
                               return item;
                          });
-                        // console.log("Check input maxNumber schedule:", schedule);
-                        // let res = await db.schedule.bulkCreate(schedule);
+                         // console.log("Check input maxNumber schedule:", schedule);
+                         // let res = await db.schedule.bulkCreate(schedule);
                          let existing = await db.schedule.findAll({
-                              where: {doctorId: inputData.doctorId, 
-                                   date: inputData.date},
-                              attributes:[ 'doctorId','timeType','date','maxNumber'],
-                             // raw: true
+                              where: {
+                                   doctorId: inputData.doctorId,
+                                   date: inputData.date
+                              },
+                              attributes: ['doctorId', 'timeType', 'date', 'maxNumber'],
+                              // raw: true
+
                          });
-                        // convert date
+                         // convert date
                          // if(existing && existing.length > 0){
                          //      existing= existing.map(item =>{
                          //           item.date = new Date(item.date).getTime();
                          //           return item;
                          //      });
                          // }
-                          console.log("check existing 1111",existing);
-                         let toCreate = _.differenceWith(schedule, existing, (a,b) =>{
+                         console.log("check existing 1111", existing);
+                         let toCreate = _.differenceWith(schedule, existing, (a, b) => {
                               return a.timeType === b.timeType && +a.date === +b.date;
                          })
                          if (toCreate && toCreate.length > 0) {
@@ -186,36 +189,42 @@ let bulkCreateSchedule = (inputData) => {
           }
      })
 }
-let scheduleDoctorByDate = (doctorId,date) => {
-     return new Promise(async(resolve,reject) => {
-        try {
-          if(!doctorId || !date) {
-               resolve({
-                    errCode: 1,
-                    errMassage: "Missing required parameter"
-               })
-          }
-          else {
-               let dataSchedule = await db.schedule.findAll({
-                    where: {
-                         doctorId: doctorId,
-                         date: date
-                    }
-               })
-               if (!dataSchedule) {
-                    dataSchedule= [];
+let scheduleDoctorByDate = (doctorId, date) => {
+     return new Promise(async (resolve, reject) => {
+          try {
+               if (!doctorId || !date) {
+                    resolve({
+                         errCode: 1,
+                         errMassage: "Missing required parameter"
+                    })
                }
-               resolve({
-                   errCode:0,
-                    data: dataSchedule
-               })
+               else {
+                    let dataSchedule = await db.schedule.findAll({
+                         where: {
+                              doctorId: doctorId,
+                              date: date
+                         },
+                         include: [
+                              { model: db.Allcodes, as: 'timeTypeData', attributes: ['valueEn', 'valueVi'] },
 
+                         ],
+                         raw: false,
+                         nest: true
+                    })
+                    if (!dataSchedule) {
+                         dataSchedule = [];
+                    }
+                    resolve({
+                         errCode: 0,
+                         data: dataSchedule
+                    })
+
+               }
+
+          } catch (e) {
+               reject(e);
           }
 
-        } catch(e) {
-          reject(e);
-        }
-          
      })
 }
 module.exports = {
