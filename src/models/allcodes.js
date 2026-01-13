@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Allcodes.init({
-    keyMap: DataTypes.STRING,
     type: DataTypes.STRING,
+    keyMap: DataTypes.STRING,
     valueEn: DataTypes.STRING,
     valueVi: DataTypes.STRING
   }, {
