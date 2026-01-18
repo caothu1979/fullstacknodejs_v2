@@ -27,6 +27,7 @@ let initWebRouters = (app) => {
     router.get("/api/get-detail-doctor-by-id", doctorController.getDetailDoctorById);
     router.post("/api/bulk-create-schedule-doctor", doctorController.postBulkCreateSchedule);
     router.get("/api/get-schedule-doctor-by-date", doctorController.getSheduleDoctorByDate);
+     router.get("/api/get-extra-doctor-by-id", doctorController.getExtraDoctorById);
     router.get("/hoidanit", (req, res) => {
         return res.send("Hello word with hoidanit");
     });
